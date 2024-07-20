@@ -22,8 +22,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_auuxs"]
 size = Vector2(30, 30)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("gun")]
+motion_mode = 1
 script = ExtResource("1_dcpn7")
+gun = NodePath("Gun")
 
 [node name="Character" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

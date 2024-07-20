@@ -1,49 +1,32 @@
+class_name Gun
 extends Area2D
 
+const bullet_path = preload("res://Scenes/bullet.tscn")
+@onready var reload_timer = $ReloadTimer
+@onready var shooting_point = $GunPgArt/ShootingPoint
+@export var sprite : Sprite2D
+@export var bullet : Sprite2D
+var gun_1_bullets = 8
+
+func _process(_delta) -> void :
+	var fire = Input.is_action_just_pressed("fire")
+	var alt_fire = Input.is_action_just_pressed("alt_fire")
+	var reload = Input.is_action_just_pressed("reload")
+	if fire and gun_1_bullets > 0 :
+		var bullet = bullet_path.instantiate()
+		shooting_point.add_child(bullet)
+		
+		gun_1_bullets = gun_1_bullets - 1
+		
+		print(gun_1_bullets)
+	if reload :
+		reload_timer.start()
+
+	if alt_fire :
+		print("MORE POWER")
 
 
 
-func _physics_process(delta):
-	var mouse_posx = get_global_mouse_position().x
-	var mouse_posy = get_global_mouse_position().y
-	
-	#constrains how far the mouse can move in and out
-	var min_distx = 0 + mouse_posx
-	var max_distx = 150 + mouse_posx
-	var min_dist_negx = 0 - mouse_posx
-	var max_dist_negx = -150 - mouse_posx
-	var min_disty = 0 + mouse_posy
-	var max_disty = 150 + mouse_posy
-	var min_dist_negy = 0 - mouse_posy
-	var max_dist_negy = -150 - mouse_posy
-	
-	#
-	print(mouse_posx)
-	print(mouse_posy)
-	print("separation")
-	print(global_position)
-	print("sep2")
-	print(get_global_mouse_position())
-	
-	#makes the gun point towards the mouse
-	look_at(get_global_mouse_position())
-	
-	#moves the gun in and out based on mouse position
-	if mouse_posx >= min_distx and mouse_posx <= max_distx:
-		global_position.x = mouse_posx * .3
-	elif mouse_posx <= min_dist_negx and mouse_posx >= max_dist_negx:
-		global_position.x = mouse_posx * .3
-	if mouse_posy >= min_disty and mouse_posy <= max_disty:
-		global_position.y = mouse_posy  * .3
-	elif mouse_posy <= min_dist_negy and mouse_posy >= max_dist_negy:
-		global_position.y = mouse_posy * .3
-	
-	
-	#flips gun when rotating
-	if get_global_mouse_position().x <= global_position.x:
-		$GunPgArt.flip_v = true
-	elif get_global_mouse_position().x >= global_position.x:
-		$GunPgArt.flip_v = false
-	
-	
-	
+func _on_reload_timer_timeout():
+	gun_1_bullets = 8
+	print("reloaded!")
