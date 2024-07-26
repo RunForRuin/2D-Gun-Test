@@ -1,0 +1,101 @@
+[gd_scene load_steps=13 format=3 uid="uid://cnjwjhedhuwrk"]
+
+[ext_resource type="Texture2D" uid="uid://cpvewi774cvtw" path="res://Assets/Sprites/Missile.png" id="1_dnvkv"]
+[ext_resource type="Script" path="res://Scripts/missile.gd" id="1_xko57"]
+[ext_resource type="Texture2D" uid="uid://dynm2oxobfgcb" path="res://Assets/Sprites/Explosion_PG_art.png" id="2_apdxs"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhfvf"]
+atlas = ExtResource("2_apdxs")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vr458"]
+atlas = ExtResource("1_dnvkv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ra60r"]
+atlas = ExtResource("1_dnvkv")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbq8b"]
+atlas = ExtResource("1_dnvkv")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u68p1"]
+atlas = ExtResource("1_dnvkv")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_co5ck"]
+atlas = ExtResource("1_dnvkv")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c41gk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhfvf")
+}],
+"loop": true,
+"name": &"Explosion",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vr458")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ra60r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbq8b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u68p1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_co5ck")
+}],
+"loop": true,
+"name": &"Missile",
+"speed": 25.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_icjyn"]
+size = Vector2(13, 1.95425)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jpl44"]
+radius = 31.0
+
+[node name="missile" type="Area2D"]
+collision_layer = 9
+collision_mask = 9
+script = ExtResource("1_xko57")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.147
+one_shot = true
+autostart = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_c41gk")
+animation = &"Explosion"
+autoplay = "Missile"
+
+[node name="missile hurtbox" type="CollisionShape2D" parent="."]
+position = Vector2(3.55271e-15, 0)
+rotation = -3.14159
+scale = Vector2(1.24593, 2.81438)
+shape = SubResource("RectangleShape2D_icjyn")
+
+[node name="explosion hurtbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_jpl44")
+disabled = true
+
+[node name="Explosion Timer" type="Timer" parent="."]
+wait_time = 0.7
+
+[connection signal="area_shape_entered" from="." to="." method="_on_area_shape_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Explosion Timer" to="." method="_on_explosion_timer_timeout"]

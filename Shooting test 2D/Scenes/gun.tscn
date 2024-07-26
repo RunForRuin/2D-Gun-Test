@@ -1,12 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwjtw85jloggi"]
+[gd_scene load_steps=4 format=3 uid="uid://dwjtw85jloggi"]
 
 [ext_resource type="Script" path="res://Scripts/gun.gd" id="1_30lxv"]
 [ext_resource type="Texture2D" uid="uid://ce0j7mquiv0m6" path="res://Assets/Sprites/Gun_PG_art.png" id="1_mxm1h"]
 
-[node name="Gun" type="Area2D" node_paths=PackedStringArray("sprite", "bullet")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gn1n8"]
+size = Vector2(32, 9)
+
+[node name="Gun" type="Area2D" node_paths=PackedStringArray("sprite")]
+collision_layer = 2
+collision_mask = 2
 script = ExtResource("1_30lxv")
 sprite = NodePath("GunPgArt")
-bullet = NodePath("")
 
 [node name="GunPgArt" type="Sprite2D" parent="."]
 texture_filter = 1
@@ -16,7 +20,17 @@ texture = ExtResource("1_mxm1h")
 [node name="ShootingPoint" type="Marker2D" parent="GunPgArt"]
 position = Vector2(15, 0)
 
-[node name="ReloadTimer" type="Timer" parent="."]
+[node name="alt timer" type="Timer" parent="."]
+wait_time = 3.539
 one_shot = true
 
-[connection signal="timeout" from="ReloadTimer" to="." method="_on_reload_timer_timeout"]
+[node name="reload timer" type="Timer" parent="."]
+wait_time = 1.25
+one_shot = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(16, -0.5)
+shape = SubResource("RectangleShape2D_gn1n8")
+
+[connection signal="timeout" from="alt timer" to="." method="_on_alt_timer_timeout"]
+[connection signal="timeout" from="reload timer" to="." method="_on_reload_timer_timeout"]

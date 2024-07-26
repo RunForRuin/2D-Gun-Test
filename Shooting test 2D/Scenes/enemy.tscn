@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://bh5f37qa7sy2a"]
+
+[ext_resource type="Texture2D" uid="uid://cn8you4cbfi01" path="res://Assets/Sprites/enemy.png" id="1_3sbuu"]
+[ext_resource type="Script" path="res://Scripts/enemy.gd" id="1_gjqtk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jws1m"]
+size = Vector2(32, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6p10y"]
+radius = 415.39
+
+[node name="enemy" type="CharacterBody2D"]
+script = ExtResource("1_gjqtk")
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_jws1m")
+
+[node name="Find Box" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Find Box"]
+shape = SubResource("CircleShape2D_6p10y")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("1_3sbuu")
+
+[connection signal="body_entered" from="Find Box" to="." method="_on_find_box_body_entered"]
+[connection signal="body_exited" from="Find Box" to="." method="_on_find_box_body_exited"]
